@@ -1,4 +1,4 @@
-import axios from '../../src'
+import axios from '../../src';
 
 axios({
   url: '/extend/post',
@@ -30,7 +30,6 @@ axios.put('/extend/put', { msg: 'put' })
 
 axios.patch('/extend/patch', { msg: 'patch' })
 
-
 // 函数重载 demo
 axios({
   url: '/extend/post',
@@ -48,7 +47,7 @@ axios('/extend/post', {
 })
 
 // 响应数据支持泛型 demo
-interface ResponseData<T=any> {
+interface ResponseData<T = any> {
   code: number
   result: T
   message: string

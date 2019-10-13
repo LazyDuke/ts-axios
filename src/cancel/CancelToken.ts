@@ -1,6 +1,5 @@
-import { CancelExecutor, CancelTokenSource, Canceler } from "../types";
-import Cancel from './Cancel'
-
+import { Canceler, CancelExecutor, CancelTokenSource } from '../types';
+import Cancel from './Cancel';
 
 interface ResolvePromise {
   (reason?: Cancel): void
@@ -9,7 +8,7 @@ interface ResolvePromise {
 /**
  * 外部实例化 CancelToken 得到 cancelToken
  * 此时 cancelToken.promise 处于 pending 状态
- * 一旦调用 cancelToken.promise.then 
+ * 一旦调用 cancelToken.promise.then
  */
 export default class CancelToken {
   promise: Promise<Cancel>
@@ -47,5 +46,3 @@ export default class CancelToken {
     }
   }
 }
-
-

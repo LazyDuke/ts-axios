@@ -1,6 +1,6 @@
-import { AxiosRequestConfig } from "./types";
-import { processHeaders } from "./helpers/headers";
-import { transformRequest, transformResponse } from "./helpers/data";
+import { transformRequest, transformResponse } from './helpers/data';
+import { processHeaders } from './helpers/headers';
+import { AxiosRequestConfig } from './types';
 
 const defaults: AxiosRequestConfig = {
   method: 'get',
@@ -12,7 +12,7 @@ const defaults: AxiosRequestConfig = {
   },
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
-  
+
   transformRequest: [
     function(data: any, headers: any): any {
       processHeaders(headers, data)
@@ -24,6 +24,10 @@ const defaults: AxiosRequestConfig = {
       return transformResponse(data)
     }
   ],
+  // 对于一个正常的请求，
+  // 往往会返回 200-300 之间的 HTTP 状态码，
+  // 对于不在这个区间的状态码，
+  // 我们也把它们认为是一种错误的情况做处理。
   validateStatus(status: number): boolean {
     return status >= 200 && status < 300
   }

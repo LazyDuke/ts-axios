@@ -1,5 +1,3 @@
-import { transformRequest } from "../helpers/data";
-
 export type Method =
   | 'get'
   | 'GET'
@@ -40,7 +38,7 @@ export interface AxiosRequestConfig {
   [propName: string]: any
 }
 
-export interface AxiosResponse<T=any> {
+export interface AxiosResponse<T = any> {
   data: T
   status: number
   statusText: string
@@ -49,9 +47,7 @@ export interface AxiosResponse<T=any> {
   request: any
 }
 
-export interface AxiosPromise<T=any> extends Promise<AxiosResponse<T>> {
-
-}
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 export interface AxiosError extends Error {
   isAxiosError: boolean
@@ -69,29 +65,29 @@ export interface Axios {
     response: AxiosInterceptorManager<AxiosResponse>
   }
 
-  request<T=any>(config: AxiosRequestConfig): AxiosPromise<T>
-  
-  get<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
-  delete<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  head<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  options<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  post<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+  options<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  put<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  patch<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
   getUri(config?: AxiosRequestConfig): string
 }
 
-export interface AxiosInstance extends Axios{
-  <T=any>(config: AxiosRequestConfig): AxiosPromise<T>
+export interface AxiosInstance extends Axios {
+  <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
-  <T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
 export interface AxiosClassStatic {
@@ -150,7 +146,7 @@ export interface CancelTokenSource {
 }
 
 export interface CancelTokenStatic {
-  new(executor: CancelExecutor): CancelToken
+  new (executor: CancelExecutor): CancelToken
   source(): CancelTokenSource
 }
 
@@ -159,7 +155,7 @@ export interface Cancel {
 }
 
 export interface CancelStatic {
-  new(message?: string): Cancel
+  new (message?: string): Cancel
 }
 
 export interface AxiosBasicCredentials {

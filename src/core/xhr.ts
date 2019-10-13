@@ -1,9 +1,9 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
-import { parseHeaders } from '../helpers/headers'
-import { createError } from '../helpers/error'
-import { isURLSameOrigin } from '../helpers/url'
-import cookie from '../helpers/cookie'
-import { isFormData } from '../helpers/util'
+import cookie from '../helpers/cookie';
+import { createError } from '../helpers/error';
+import { parseHeaders } from '../helpers/headers';
+import { isURLSameOrigin } from '../helpers/url';
+import { isFormData } from '../helpers/util';
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types';
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     // 第三个参数为 async 是否是异步请求
     // 这里可以保证运行时 url 是有值的
     request.open(method.toUpperCase(), url!, true)
-    
+
     configureRequest()
     addEvents()
     processHeaders()
@@ -41,11 +41,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (responseType) {
         request.responseType = responseType
       }
-      
+
+      // 默认 timeout 为 0，
+      // 如果有设置 timeout，赋给 request.timeout
       if (timeout) {
         request.timeout = timeout
       }
-  
+
       if (withCredentials) {
         request.withCredentials = withCredentials
       }
@@ -53,17 +55,21 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     function addEvents(): void {
       request.onreadystatechange = () => {
+        // 如果 request.readyState 不为 DONE (下载操作已完成)，
+        // 直接返回
         if (request.readyState !== 4) {
           return
         }
         if (request.status === 0) {
           return
         }
+
+        // 将字符串的 responseHeaders 转换成对象
         const responseHeaders = parseHeaders(request.getAllResponseHeaders())
-  
+
         // 根据传入的 responseType 来决定返回的数据
         const responseData = responseType === 'text' ? request.responseText : request.response
-  
+
         const response: AxiosResponse = {
           data: responseData,
           status: request.status,
@@ -72,22 +78,24 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
           config,
           request
         }
-  
+
         handleResponse(response)
       }
 
+      // 处理网络错误
       request.onerror = () => {
         reject(createError(`NetWork Error`, config, null, request))
       }
-  
+
+      // 当请求发送后超过某个时间后仍然没收到响应，则请求自动终止，并触发 timeout 事件
       request.ontimeout = () => {
         reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
       }
-  
+
       if (onDownloadProgress) {
         request.onprogress = onDownloadProgress
       }
-  
+
       if (onUploadProgress) {
         request.upload.onprogress = onUploadProgress
       }
@@ -103,7 +111,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       }
 
       /**
-       * 跨站请求伪造 xsrf 防御 
+       * 跨站请求伪造 xsrf 防御
        * 当请求开启了 withCredentials 或者是同源请求时
        * 如果存在 xsrfCookieName 则为请求 headers 带上它的值
        */
@@ -115,9 +123,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       }
 
       if (auth) {
-        headers['Authorization'] =  `Basic ${btoa(`${auth.username} : ${auth.password}`)}`
+        headers['Authorization'] = `Basic ${btoa(`${auth.username} : ${auth.password}`)}`
       }
 
+      // 遍历 传入的 headers，
+      // 将 属性 一一设置进 headers
       Object.keys(headers).forEach(name => {
         // 如果 data 为 null headers 的 content-type 属性没有意义
         if (data === null && name.toLowerCase() === 'content-type') {
@@ -136,19 +146,15 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         })
       }
     }
-    
+
     function handleResponse(response: AxiosResponse): void {
       const { status } = response
+      // 针对返回的 status 来做错误判定处理
       if (!validateStatus || validateStatus(status)) {
         resolve(response)
       } else {
-        reject(createError(
-            `Request failed with status code ${status}`,
-            config,
-            null,
-            request,
-            response
-          )
+        reject(
+          createError(`Request failed with status code ${status}`, config, null, request, response)
         )
       }
     }
